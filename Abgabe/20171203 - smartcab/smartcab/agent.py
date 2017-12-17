@@ -23,7 +23,7 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Set any additional class parameters as needed
-        self.t = 0.0
+        
 
 
     def reset(self, destination=None, testing=False):
@@ -45,19 +45,8 @@ class LearningAgent(Agent):
             self.epsilon = 0.0
             self.alpha = 0.0
         else:
-            #self.epsilon = self.epsilon - 0.05
-            
-            # let make and random step
-            if (self.t != 0):
-                self.epsilon = 1.0 / float(self.t ** 2) # F/F 20
-                #self.epsilon = self.alpha ** self.t #F/F
-                #self.epsilon = math.exp(-1.0* 0.9 * self.t) #F/F 
-                #self.epsilon = math.fabs(math.cos(self.alpha * self.t)) #F/C
-                #self.epsilon = self.epsilon * 0.95 #F/B #F/C
-                #self.epsilon = 0.99 ** self.t #F/B 
-            self.t += 1.0
-            
-            
+            self.epsilon = self.epsilon - 0.05
+
         return None
 
     def build_state(self):
@@ -96,15 +85,12 @@ class LearningAgent(Agent):
         ###########
         # Calculate the maximum Q-value of all actions for a given state
 
-        #maxQ = float('-inf')
-        #actions = self.Q[state]
-        #for k,v in actions.iteritems():
-        #    maxQ = max(maxQ, v)
+        maxQ = float('-inf')
+        actions = self.Q[state]
+        for k,v in actions.iteritems():
+            maxQ = max(maxQ, v)
 
-        #return maxQ 
-
-        #after code review:
-        return max(self.Q[state].values())
+        return maxQ 
 
 
     def createQ(self, state):
@@ -166,20 +152,19 @@ class LearningAgent(Agent):
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
 
+        print("Achtung!!!")
+        #print(self.Q)
         print("Action!!!")
         print(action)
+        
         print("State!!!")
         print(state)
-        print("Q[State]!!!")
+        print("State!!!")
         print(self.Q[state])
-        print("self.Q[state][action]!!!")
+        print("State!!!")
         print(self.Q[state][action])
-        print("Epsilon")
-        print(self.epsilon)
-        print("Number of repeats")
-        print(self.t)       
         if self.learning:
-            self.Q[state][action] += self.alpha*(reward - self.Q[state][action]) 
+            self.Q[state][action] += self.alpha*(reward) 
         return 
 
     def update(self):
@@ -214,7 +199,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent, learning = True, alpha = 0.95)
+    agent = env.create_agent(LearningAgent, learning = True)
     
     ##############
     # Follow the driving agent
@@ -229,14 +214,14 @@ def run():
     #   display      - set to False to disable the GUI if PyGame is enabled
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
-    sim = Simulator(env, update_delay = 0.0001, log_metrics = True, display = False, optimized = True)
+    sim = Simulator(env, update_delay = 0.01, log_metrics = True, display = True)
     
     ##############
     # Run the simulator
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05 
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run(n_test = 10, tolerance = 0.00001)
+    sim.run(n_test = 10)
 
 
 if __name__ == '__main__':
