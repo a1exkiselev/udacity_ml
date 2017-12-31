@@ -105,4 +105,5 @@ target/
 .ipynb_checkpoints
 
 #saved models
-.hdf5
+*.hdf5
+
